@@ -36,6 +36,15 @@ namespace Bhavna.Web.API
 
             // Added services
             services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAngularApp", builder =>
+                {
+                    builder.WithOrigins("http://localhost:4200")
+                           .AllowAnyHeader()
+                           .AllowAnyMethod();
+                });
+            });
 
             // Add Swagger services
             services.AddSwaggerGen(c =>
@@ -53,6 +62,9 @@ namespace Bhavna.Web.API
                 });
             });
         }
+        //
+
+        //
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
@@ -79,7 +91,7 @@ namespace Bhavna.Web.API
                     SeedData.Initialize(dbContext);
                 }
             }
-
+            app.UseCors("AllowAngularApp");
             app.UseRouting();
             app.UseEndpoints(endpoints =>
             {

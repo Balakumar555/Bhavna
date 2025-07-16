@@ -1,5 +1,4 @@
 ﻿using Bhavna.Web.API.Interfaces;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Bhavna.Web.API.Controller
@@ -14,6 +13,7 @@ namespace Bhavna.Web.API.Controller
             this._productRepository = productRepository;  
         }
         [HttpGet]
+        [Route("GetProducts")]
         public async Task<IActionResult> GetProducts()
         {
             try

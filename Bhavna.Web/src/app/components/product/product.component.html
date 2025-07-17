@@ -1,0 +1,104 @@
+<div class="row">
+  <div class="card">
+    <div class="card-body">
+      <div class="card">
+        <div class="card-header">
+          <h2>Product Summary</h2>
+        </div>
+        <div class="card-body">
+          <div
+            class="chart-container"
+            style="position: relative; height: 400px; width: 100%"
+          >
+            <!-- Existing Stacked Chart -->
+            <h3>Products by Rating Group</h3>
+            <canvas #ratingChart style="height: 400px"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-body">
+      <div class="card">
+        <div class="card-header d-flex justify-content-between">
+          <h3 class="card-title">Products</h3>
+          <input
+            type="text"
+            class="form-control w-25"
+            placeholder="Search..."
+            [(ngModel)]="searchTerm"
+            (input)="onSearch(searchTerm)"
+          />
+        </div>
+
+        <div class="card-body">
+          <table class="table table-bordered table-striped">
+            <thead class="thead-dark">
+              <tr>
+                <th class="curosoClass" (click)="changeSort('id')">Id</th>
+                <th class="curosoClass" (click)="changeSort('name')">Name</th>
+                <th class="curosoClass" (click)="changeSort('description')">
+                  Description
+                </th>
+                <th class="curosoClass" (click)="changeSort('brand')">Brand</th>
+                <th class="curosoClass" (click)="changeSort('price')">Price</th>
+                <th class="curosoClass" (click)="changeSort('stockQuantity')">
+                  Stock
+                </th>
+                <th class="curosoClass" (click)="changeSort('rating')">
+                  Rating
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let product of pagedProducts">
+                <td>{{ product.id }}</td>
+                <td>{{ product.name }}</td>
+                <td>{{ product.description }}</td>
+                <td>{{ product.brand }}</td>
+                <td>{{ product.price }}</td>
+                <td>{{ product.stockQuantity }}</td>
+                <td>{{ product.rating }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card-footer">
+          <!-- Pagination -->
+          <nav class="mt-3">
+            <ul class="pagination justify-content-center">
+              <li class="page-item" [class.disabled]="currentPage === 1">
+                <a class="page-link" (click)="changePage(currentPage - 1)"
+                  >Previous</a
+                >
+              </li>
+              <li
+                class="page-item"
+                *ngFor="
+                  let page of [].constructor(
+                    Math.ceil(filteredProducts.length / pageSize)
+                  );
+                  let i = index
+                "
+                [class.active]="currentPage === i + 1"
+              >
+                <a class="page-link" (click)="changePage(i + 1)">{{ i + 1 }}</a>
+              </li>
+              <li
+                class="page-item"
+                [class.disabled]="
+                  currentPage === Math.ceil(filteredProducts.length / pageSize)
+                "
+              >
+                <a class="page-link" (click)="changePage(currentPage + 1)"
+                  >Next</a
+                >
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

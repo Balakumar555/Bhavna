@@ -28,7 +28,7 @@ export class ProductComponent implements OnInit, AfterViewInit {
   products: Product[] = [];
   filteredProducts: Product[] = [];
 
-  pageSize = 15;
+  pageSize = 10;
   currentPage = 1;
   searchTerm: string = '';
   sortColumn: keyof Product = 'name';
@@ -65,14 +65,18 @@ export class ProductComponent implements OnInit, AfterViewInit {
     let result = [...this.products];
 
     if (this.searchTerm) {
-      const term = this.searchTerm.toLowerCase();
-      result = result.filter(
-        (p) =>
-          p.name?.toLowerCase().includes(term) ||
-          p.description?.toLowerCase().includes(term) ||
-          p.brand?.toLowerCase().includes(term) 
-      );
-    }
+  const term = this.searchTerm.toLowerCase();
+  result = result.filter((p) =>
+    (p.name && p.name.toLowerCase().includes(term)) ||
+    (p.description && p.description.toLowerCase().includes(term)) ||
+    (p.price && String(p.price).includes(term)) ||
+    (p.salePrice && String(p.salePrice).includes(term)) ||
+    (p.stockQuantity && String(p.stockQuantity).includes(term)) ||
+    (p.category && p.category.toLowerCase().includes(term)) ||
+    (p.brand && p.brand.toLowerCase().includes(term)) ||
+    (p.rating && p.rating.toLowerCase().includes(term))
+  );
+}
 
     result.sort((a, b) => {
       const valA = a[this.sortColumn];

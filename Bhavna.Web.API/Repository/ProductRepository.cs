@@ -47,6 +47,21 @@ namespace Bhavna.Web.API.Repository
             }
 
         }
+        public async Task<List<Product>> GetProductsPagination(int pageNumber=1, int pageSize =15)
+        {
+            try
+            {
+                var products = await _dbcontext.products
+                    .Skip((pageNumber - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToListAsync();
+                return products;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
     }
 
 }

@@ -5,21 +5,26 @@ namespace Bhavna.Web.API.DdContextConfiguration
 {
     public class ApplicationDBContext : DbContext
     {
-        public ApplicationDBContext(DbContextOptions<ApplicationDBContext> options) : base(options)
+        public ApplicationDBContext(DbContextOptions<ApplicationDBContext> options)
+            : base(options)
         {
-
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Product>(entity =>
+            {
+                entity.Property(p => p.Price)
+                      .HasColumnType("decimal(18,2)");
+
+                entity.Property(p => p.SalePrice)
+                      .HasColumnType("decimal(18,2)");
+
+              
+            });
+
+            // Other configurations...
         }
 
-        public DbSet<User> users { get; set; }
-
         public DbSet<Product> products { get; set; }
-
-        public DbSet<Order> orders { get; set; }
-
-        public DbSet<OrderItem> orderItems { get; set; }
     }
 }

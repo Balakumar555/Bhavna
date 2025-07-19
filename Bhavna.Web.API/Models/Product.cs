@@ -21,7 +21,7 @@ namespace Bhavna.Web.API.Models
 
         public string? Brand { get; set; }
 
-        public decimal? Weight { get; set; }
+        //public decimal? Weight { get; set; }
 
         public string? Rating { get; set; }
     }

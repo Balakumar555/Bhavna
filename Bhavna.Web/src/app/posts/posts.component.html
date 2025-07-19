@@ -1,0 +1,21 @@
+<p>posts works!</p>
+<div>
+    <table>
+        <thead>
+            <tr>
+                <th class="curosoClass" >ID</th>
+                <th class="curosoClass" >Title</th>
+                <th class="curosoClass" >Body</th>
+                <th class="curosoClass" >User ID</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let post of posts">
+                <td>{{ post.id }}</td>
+                <td>{{ post.title }}</td>
+                <td>{{ post.body }}</td>
+                <td>{{ post.userId }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

@@ -2,30 +2,28 @@
 using Bhavna.Web.API.Interfaces;
 using Bhavna.Web.API.Repository;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;  // Added this namespace
+using Microsoft.Extensions.Configuration;
+using Microsoft.OpenApi.Models;  
 using Newtonsoft.Json;
+
 
 namespace Bhavna.Web.API
 {
     public class Startup
     {
         private readonly IConfiguration _configuration;
-        private static string contentRootPath;
+      
 
         public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             _configuration = configuration;
-            contentRootPath = env.ContentRootPath;
         }
 
         public void ConfigureServices(IServiceCollection services)
         {
-            var databasePath = Path.Combine(contentRootPath, "DdContextConfiguration", "mydatabase.db");
 
-            Console.WriteLine($"Database Path: {databasePath}");
-
-            services.AddDbContext<ApplicationDBContext>(options => options.UseSqlite($"Data Source={databasePath}"));
-
+            services.AddDbContext<ApplicationDBContext>(options =>
+            options.UseSqlServer(_configuration.GetConnectionString("DefaultConnection")));
             services.AddControllers().AddNewtonsoftJson(options =>
             {
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
@@ -78,19 +76,19 @@ namespace Bhavna.Web.API
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Bhavna Web API v1");
-                c.RoutePrefix = string.Empty; // Sets Swagger UI at the root
+                c.RoutePrefix = string.Empty;
             });
 
-            using (var serviceScope = app.ApplicationServices.CreateScope())
-            {
-                var dbContext = serviceScope.ServiceProvider.GetRequiredService<ApplicationDBContext>();
+            //using (var serviceScope = app.ApplicationServices.CreateScope())
+            //{
+            //    var dbContext = serviceScope.ServiceProvider.GetRequiredService<ApplicationDBContext>();
 
-                if (env.IsDevelopment())
-                {
-                    dbContext.Database.Migrate();
-                    SeedData.Initialize(dbContext);
-                }
-            }
+            //    if (env.IsDevelopment())
+            //    {
+            //        dbContext.Database.Migrate();
+            //        SeedData.Initialize(dbContext);
+            //    }
+            //}
             app.UseCors("AllowAngularApp");
             app.UseRouting();
             app.UseEndpoints(endpoints =>

@@ -17,7 +17,7 @@ namespace Bhavna.Web.API.Repository
         private readonly DistributedCacheEntryOptions _cacheEntryOptions;
         public ProductRepository(ApplicationDBContext _dbcontext, IDistributedCache _distributedCache)
         {
-            this._dbcontext = _dbcontext ?? throw new ArgumentNullException(nameof(_dbcontext));
+            this._dbcontext = _dbcontext;
             this._distributedCache = _distributedCache;
             _cacheEntryOptions = new DistributedCacheEntryOptions()
                 .SetAbsoluteExpiration(TimeSpan.FromMinutes(60))

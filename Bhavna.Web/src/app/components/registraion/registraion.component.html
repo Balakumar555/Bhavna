@@ -1,4 +1,6 @@
-<div class="card m-3 d-flex justify-content-center align-items-center min-vh-100">
+<div
+  class="card m-3 d-flex justify-content-center align-items-center min-vh-100"
+>
   <h4 class="card-header">Registration Form</h4>
   <div class="card-body">
     <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
@@ -8,15 +10,22 @@
           type="text"
           class="form-control"
           formControlName="firstName"
+          [placeholder]="
+            firstName.invalid && (firstName.dirty || firstName.touched)
+              ? 'First name is required'
+              : 'Enter first name'
+          "
+          [class.is-invalid]="
+            firstName.invalid && (firstName.dirty || firstName.touched)
+          "
         />
+        <div *ngIf="firstName.errors?.['pattern']">
+          Only alphabets (A-Z, a-z) are allowed
+        </div>
       </div>
       <div class="mb-3">
         <label class="form-label">Last name</label>
-        <input
-          type="text"
-          class="form-control"
-          formControlName="lastName"
-        />
+        <input type="text" class="form-control" formControlName="lastName" />
       </div>
       <div class="mb-3">
         <label class="form-label">Email address</label>
@@ -24,8 +33,15 @@
           type="email"
           class="form-control"
           formControlName="email"
+          [ngClass]="{ 'is-invalid': email?.touched && email?.invalid }"
         />
-        <div class="form-text">
+        <div *ngIf="email?.touched && email?.invalid" class="invalid-feedback">
+          <div *ngIf="email?.errors?.['required']">Email is required</div>
+          <div *ngIf="email?.errors?.['email']">
+            Please enter a valid email address
+          </div>
+        </div>
+        <div class="form-text text-muted">
           We'll never share your email with anyone else.
         </div>
       </div>
@@ -35,29 +51,62 @@
           type="date"
           class="form-control"
           formControlName="dob"
+          [class.is-invalid]="dob.invalid && (dob.dirty || dob.touched)"
         />
-      </div>
-        <div class="mb-3">
-        <div class="form-text">Gender</div>
-        <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" formControlName="gender" value="male">
-          <label class="form-check-label">Male</label>
-        </div>
-        <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" formControlName="gender" value="female">
-          <label class="form-check-label">Female</label>
+        <div
+          *ngIf="dob.invalid && (dob.dirty || dob.touched)"
+          class="invalid-feedback"
+        >
+          <div *ngIf="dob.errors?.['required']">Date of Birth is required</div>
+          <div *ngIf="dob.errors?.['minimumAge']">
+            You must be at least 18 years old (current age:
+            {{dob.errors?.['minimumAge'].actualAge}})
+          </div>
         </div>
       </div>
       <div class="mb-3">
+        <div class="form-text">Gender</div>
+        <div class="form-check form-check-inline">
+          <input
+            class="form-check-input"
+            type="radio"
+            formControlName="gender"
+            value="male"
+          />
+          <label class="form-check-label">Male</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input
+            class="form-check-input"
+            type="radio"
+            formControlName="gender"
+            value="female"
+          />
+          <label class="form-check-label">Female</label>
+        </div>
+      </div>
+      <div class="mb-3 position-relative">
         <label class="form-label">Password</label>
         <input
           type="password"
-          class="form-control"
+          class="form-control pe-5"
           formControlName="password"
+          [type]="hidePassword ? 'password' : 'text'"
         />
+        <i
+          class="bi position-absolute end-0 top-50 me-3"
+          [class.bi-eye]="!hidePassword"
+          [class.bi-eye-slash]="hidePassword"
+          (click)="hidePassword = !hidePassword"
+          style="cursor: pointer"
+        ></i>
       </div>
       <div class="mb-3 form-check">
-        <input type="checkbox" class="form-check-input" formControlName="acceptTerms">
+        <input
+          type="checkbox"
+          class="form-check-input"
+          formControlName="acceptTerms"
+        />
         <label class="form-check-label">I agree to terms and conditions</label>
       </div>
       <button type="submit" class="btn btn-primary">Submit</button>
